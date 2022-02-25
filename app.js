@@ -12,7 +12,7 @@ app.use('/posts', postsRoute);
 
 // Routes
 
-// app.get('/', (req,res) => {
+// app.get('/', `(req,res) => {
 //     res.send("I was here");
 // })
 
