@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const router = require('./routers/UserRouter');
+const router = require('./src/routers/UserRouter');
 require('dotenv').config();
 
 const url = process.env.DB_CONNECTION;
