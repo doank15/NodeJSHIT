@@ -1,60 +1,72 @@
-const Users = require('../models/UserSchema');
+const Users = require("../models/UserModel");
+const Post = require("../models/PostModel");
+const catchAsync = require("../untils/catchAsync");
 
-exports.getUsers = async (req, res) => {
-    try {
-        let result = await Users.find();
-        res.json(result);
-    } catch (error) {
-        res.send({message: error});
-    }
-}
+exports.getUsers = catchAsync(async (req, res, next) => {
+    const users = await Users.find().populate("posts").exec()
+    res.status(200).json({
+        status: "Success",
+        data: users,
+    })
+});
 
-exports.postUser = async (req, res) => {
-    try {
-        const user = new Users({
-            email : req.body.email,
-            password: req.body.password,
-            role: req.body.role
-        })
-        Users.insertMany(user, (err, res) => {
-            if(err) throw err;
-            res.send("Successfully!") 
-        })
-    } catch (error) {
-        res.status(404).send({message: error})
-    }
-}
+exports.postUser = catchAsync(async (req, res,next) => {
+  const newUser = Users.create(req.body);
+  res.status(200).json({
+    status: "Success",
+    data: newUser,
+  });
+});
+exports.getUserByAgeCondition = catchAsync(async (req, res, next) => {
+  const user = await Users.find({ age: { $gte: 18, $lte: 40 } });
+  res.status(200).json({
+    status: "Success",
+    data: user,
+  });
+});
 
-exports.getUserById = async (req, res) => {
-    try {
-        let id = req.params.userID;
-        let result = await Users.findById(id).exec()
-        // console.log(result);
-        res.json(result);
-    } catch (error) {
-        res.status(404).send({message: error})
-    }
-} 
+exports.getUserByUserNameCondition = catchAsync(async (req, res, next) => {
+  const user = await Users.find({ name: /^h/ });
+  res.status(200).json({
+    status: "Success",
+    data: user,
+  });
+});
 
+exports.addUser = catchAsync(async (req, res, next) => {
+  const user = req.body;
+  Users.create(user);
+  res.status(200).json({
+    status: "Success",
+    data: user,
+  });
+});
 
-exports.updateUserByID = async (req, res) => {
-    try {
-        let id = req.params.userID;
-        // let {email} = req.body.email;
-        let result = await Users.findByIdAndUpdate({_id: id},{email: req.body.email});
-        console.log(result);
-        res.json(result);
-    } catch (error) {
-        res.status(404).send({message : error})
-    }
-}
+exports.getUserById = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const user = await Users.findById(id).populate("posts");
+
+  res.status(200).json({
+    status: "Success",
+    data: user,
+  });
+});
+exports.updateUserByID = catchAsync(async (req, res, next) => {
+  try {
+    let { id } = req.params;
+    let result = await Users.findByIdAndUpdate(id, req.body);
+    res.json(result);
+  } catch (error) {
+    res.status(404).send({ message: error });
+  }
+});
 
 exports.deleteUserByID = async (req, res) => {
-    try {
-        let id = req.params.userID;
-        await Users.findByIdAndDelete({_id: id});
-        res.status(200).send("Deleted");
-    } catch (error) {
-        res.status(404).send({message: error})
-    }
-}
+  try {
+    let { id } = req.params;
+    await Users.findByIdAndDelete(id);
+    res.status(200).send("Deleted");
+  } catch (error) {
+    res.status(404).send({ message: error });
+  }
+};
