@@ -141,6 +141,7 @@ router.use(function(req, res, next) {
 ### MongoDB Advanced Queries Function 
 + Setting a value of 1 means we want to display the content of the field
 + Setting a value of 0 means we don't want to display the contents of the field 
+
 ### Note: Setting a field to 1 will automatically set other fields to 0, except the _id field. Therefore you do not have to explicitly set all the other fields to 0. 
 
 ### Sorting the Result of Query
@@ -174,7 +175,7 @@ router.use(function(req, res, next) {
 
 # Note: Connect to DB
 + ADD current IP of computer 
-+ ADD url of MongoDB Compas 
++ ADD url of MongoDB Compass
 
 # BTVN buổi 4
 Tạo 1 model User, Post phù hợp với các yêu cầu dưới
@@ -187,3 +188,28 @@ Lấy ra các user có tên bắt đầu bằng chữ "h"
 Cập nhật thông tin của người dùng theo id
 Xoá người dùng theo id
 Viết 1 middleware để các api thứ 1,3,4,6 phải có quyền admin mới được dùng
+
+
+# BTVN Buổi 5 JWT authentication
+Các bạn code api nén văn bản hoặc api mã hóa, giải mã 1 đoạn văn bản hoặc rút gọn link :
+* Mô tả rút gọn link (nếu ai chọn)
+- Người dùng nhập link gốc -> server trả về link rút gọn
+- Truy cập link gút gọn -> chuyển hướng đến link gốc
+Yêu cầu:
+- API chỉ dùng được khi có token jwt
+- Viết middleware xử lý lỗi
+
+# Stateless: 
++ Là kiểu thiết kế không lưu dữ liệu của client trên server 
+
+# Session Based Authentication  
++ In here, Server sẽ tạo 1 sesstion cho users sau khi login. Session ID sẽ được save ở cookie trong trình duyệt người dùng.  While người dùng vẫn còn đăng nhập, cookie sẽ gửi tiếp cùng với những req tiếp theo. 
+
+# Token based Authentication
++ In here, server tạo JWT một cách bí mật và gửi JWT tới client. Client save JWT and add JWT vào header với mọi request. Server sau đó sẽ xác thực JWT với mọi req từ client and return response 
+
+
+## Learning JWT
++ JWT có 3 thành phần quan trọng JWT: Header, Payload, Signature
++ Chúng kết hợp lại cùng nhau tạo thành một cấu trúc chuẩn: header.payload.signature.
++ Người dùng thường attaches JWT trong việc Authorization header với tiền tố Bearer or only in x-access-token header

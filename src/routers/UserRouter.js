@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userSchema = require('../controller/UsersControllers');
 const authMiddleware = require('../middlewares/authMiddleware');
+const registerConstroller = require('../controller/RegisterAndLogin');
 router.route('/')
 .get(authMiddleware.authorization,userSchema.getUsers)
 .post(userSchema.postUser)
@@ -17,4 +18,6 @@ router.route('/:id')
 .post(userSchema.updateUserByID)
 .delete(userSchema.deleteUserByID)
 
+router.post('/register', registerConstroller.userRegister)
+router.post('/login', registerConstroller.userLogin)
 module.exports = router

@@ -3,7 +3,7 @@ const Post = require("../models/PostModel");
 const catchAsync = require("../untils/catchAsync");
 
 exports.getUsers = catchAsync(async (req, res, next) => {
-    const users = await Users.find().populate("posts").exec()
+    const users = await Users.find().populate("Post")
     res.status(200).json({
         status: "Success",
         data: users,
@@ -44,7 +44,7 @@ exports.addUser = catchAsync(async (req, res, next) => {
 
 exports.getUserById = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const user = await Users.findById(id).populate("posts");
+  const user = await Users.findById(id).populate("Post");
 
   res.status(200).json({
     status: "Success",
